@@ -105,7 +105,7 @@ class Common
     {
         $encryptStr = "";
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            $postStr = file_get_contents("php://input");
+            $postStr = !empty($GLOBALS['HTTP_RAW_POST_DATA']) ? $GLOBALS['HTTP_RAW_POST_DATA'] : file_get_contents("php://input");
             $array = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
             $this->encrypt_type = isset($_GET["encrypt_type"]) ? $_GET["encrypt_type"] : '';
             if ($this->encrypt_type == 'aes') {

@@ -52,7 +52,8 @@ class WechatReceive extends WechatMessage
         if ($this->_receive) {
             return $this;
         }
-        $postStr = !empty($this->postxml) ? $this->postxml : file_get_contents("php://input");
+        $postStr = !empty($this->postxml) ? $this->postxml : 
+                    ($GLOBALS['HTTP_RAW_POST_DATA'] ? $GLOBALS['HTTP_RAW_POST_DATA'] : file_get_contents("php://input"));
         !empty($postStr) && $this->_receive = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
         return $this;
     }
