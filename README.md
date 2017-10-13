@@ -1,49 +1,8 @@
-[![Latest Stable Version](https://poser.pugx.org/zoujingli/wechat-php-sdk/v/stable)](https://packagist.org/packages/zoujingli/wechat-php-sdk)
-[![Total Downloads](https://poser.pugx.org/zoujingli/wechat-php-sdk/downloads)](https://packagist.org/packages/zoujingli/wechat-php-sdk)
-[![Latest Unstable Version](https://poser.pugx.org/zoujingli/wechat-php-sdk/v/unstable)](https://packagist.org/packages/zoujingli/wechat-php-sdk)
-[![License](https://poser.pugx.org/zoujingli/wechat-php-sdk/license)](https://packagist.org/packages/zoujingli/wechat-php-sdk)
-
-此`SDK`运行最底要求`PHP`版本`5.3`, 建议在`PHP7`上运行以获取最佳性能。
-
-微信的部分接口需要缓存数据在本地，因此对目录需要有写权限。
-
-我们鼓励大家使用`composer`来管理您的第三方库，方便后期更新操作（尤其是接口类）。
-
-近期`access_token`经常无故失效，`SDK`已加入失败状态检测，自动重新获取`access_token`并返回结果.
-
-此`SDK`已历经数个线上项目验证与考验，可靠性与稳定性极高，欢迎`fork`或`star`此项目。
-
-
-**微信SDK开发帮助及交流**
---
-* **在做微信开发前，必需先阅读微信官方文档，此SDK也是基于之上进行的封装。**
-
-* **文档链接地址**：http://www.kancloud.cn/zoujingli/wechat-php-sdk
-
-* **Think.Admin**：https://github.com/zoujingli/Think.Admin
-
-* **开发交流QQ群：513350915（新）**
-
-**若对您有帮助，可以赞助并支持下作者哦，谢谢！**
---
-![](https://git.kancloud.cn/repos/zoujingli/wechat-php-sdk/raw/master/image/%E8%B5%9E%E5%8A%A9.png?access-token=49255b63935edafaf42aec9376136528&v1)
-
-
-**官方接口文档链接**
---
-* 使用前需先打开微信帐号的开发模式，详细步骤请查看微信公众平台接口使用说明：  
-* 微信公众平台： http://mp.weixin.qq.com/wiki/
-* 微信企业平台： http://qydev.weixin.qq.com/wiki/
-* 微信开放平台：https://open.weixin.qq.com/
-* 微信支付接入文档：https://mp.weixin.qq.com/cgi-bin/readtemplate?t=business/course2_tmpl&lang=zh_CN
-* 微信商户平台：https://pay.weixin.qq.com
-
 **微信`SDK`项目源文件托管**
 --
-* SDK 为开源项目，你可以把它用于任何地址，并不受任何约束，欢迎`fork`项目。
-* 通过 [Github](https://github.com/zoujingli/wechat-php-sdk) 下载 SDK 源代码
-* 通过 [OSChina](http://git.oschina.net/zoujingli/wechat-php-sdk) 下载 SDK 源代码
 * 通过 [Composer](https://getcomposer.org) 包管理工具下载 SDK 源代码
+./composer.phar require mojianyuan/wechat-php-sdk dev-master
+
 
 **微信`SDK`封装对接及功能**
 --
