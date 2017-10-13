@@ -705,7 +705,8 @@ class WechatReceive extends WechatMessage
             'FromUserName' => $this->getRevTo(),
             'CreateTime'   => time(),
             'MsgType'      => self::MSGTYPE_NEWS,
-            'News'     => $newsData,
+            'ArticleCount' => count($newsData),
+            'Articles'     => $newsData,
         );
         $this->Message($msg);
         return $this;
