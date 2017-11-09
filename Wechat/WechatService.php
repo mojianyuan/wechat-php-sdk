@@ -404,5 +404,162 @@ class WechatService
         return $this->parseJson(Tools::httpGet($url));
     }
 
+    /**
+     *  第三方平台在代替小程序发布代码之前，需要调用接口为小程序添加第三方自身的域名
+     * @param string $params
+     * @param string $authorizer_refresh_token 授权方刷新令牌
+     * @return bool
+     */
+    public function miniappModifyDomain($params, $authorizer_refresh_token)
+    {
+        $data = array();
+        $data['action'] = 'add';
+        $data['requestdomain'] = $params['requestdomain'];
+        $data['wsrequestdomain'] = $params['wsrequestdomain'];
+        $data['uploaddomain'] = $params['uploaddomain'];
+        $data['downloaddomain'] = $params['downloaddomain'];
+        $url = 'https://api.weixin.qq.com/wxa/modify_domain?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, Tools::json_encode($data));
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp modify domain Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+        return $result;
+    }
 
+    /**
+     * 小程序绑定测试者 
+     * @param string $wechatID
+     * @param string $authorizer_refresh_token 授权方刷新令牌
+     * @return bool
+     */
+    public function miniappBindTester($wechatID, $authorizer_refresh_token)
+    {
+        $data = array();
+        $data['wechatid'] = $wechatID;
+        $url = 'https://api.weixin.qq.com/wxa/modify_domain?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, Tools::json_encode($data));
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp bind tester Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+        return $result;
+    }
+
+    /**
+     * 小程序解绑测试者 
+     * @param string $wechatID
+     * @param string $authorizer_refresh_token 授权方刷新令牌
+     * @return bool
+     */
+    public function miniappUnbindTester($wechatID, $authorizer_refresh_token)
+    {
+        $data = array();
+        $data['wechatid'] = $wechatID;
+        $url = 'https://api.weixin.qq.com/wxa/unbind_tester?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, Tools::json_encode($data));
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp unbind tester Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+        return $result;
+    }
+
+    /**
+     * 为授权的小程序帐号上传小程序代码 
+     * @param string $params
+     * @param string $authorizer_refresh_token 授权方刷新令牌
+     * @return bool
+     */
+    public function miniappCommit($params, $authorizer_refresh_token)
+    {
+        $data = array();
+        $data['template_id'] = $params['template_id'];
+        $data['ext_json'] = $params['ext_json'];
+        $data['user_version'] = $params['user_version'];
+        $data['user_desc'] = $params['user_desc'];
+        $url = 'https://api.weixin.qq.com/wxa/commit?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, Tools::json_encode($data));
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp unbind tester Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+        return $result;
+    }
+
+    /**
+     * 获取体验小程序的体验二维码 
+     * @param string $authorizer_refresh_token 授权方刷新令牌
+     * @return image/jpeg  
+     */
+    public function miniappGetQrcode($authorizer_refresh_token)
+    {
+        $url = 'https://api.weixin.qq.com/wxa/get_qrcode?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, '');
+
+        return $result;
+    }
+
+    /**
+     * 获取授权小程序帐号的可选类目 
+     * @param string $authorizer_refresh_token 授权方刷新令牌
+     * @return data  
+     */
+    public function miniappGetCategory($authorizer_refresh_token)
+    {
+        $url = 'https://api.weixin.qq.com/wxa/get_category?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, '');
+
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp get category Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+
+        return $result;
+    }
+    
+    /**
+     * 获取小程序的第三方提交代码的页面配置 
+     * @param string $authorizer_refresh_token 授权方刷新令牌
+     * @return data  
+     */
+    public function miniappGetPage($authorizer_refresh_token)
+    {
+        $url = 'https://api.weixin.qq.com/wxa/get_category?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, '');
+
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp get category Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+
+        return $result;
+    }
+    
+    /**
+     * 将第三方提交的代码包提交审核（仅供第三方开发者代小程序调用） 
+     * @param string $data
+     * @param string $authorizer_refresh_token 授权方刷新令牌
+     * @return bool
+     */
+    public function miniappSubmitAudit($data, $authorizer_refresh_token)
+    {
+        $url = 'https://api.weixin.qq.com/wxa/submit_audit?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, Tools::json_encode($data));
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp Submit Audit Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+        return $result;
+    }
+
+    /**
+     * 微信登录 code 换取 session_key 
+     * @param string $code 登录时获取的 code
+     * @param string $appID 小程序的AppID
+     * @param string $authorizer_refresh_token 授权方刷新令牌
+     * @return bool
+     */
+    public function miniappLogin($code, $appID, $authorizer_refresh_token)
+    {
+        $url = "https://api.weixin.qq.com/sns/component/jscode2session?appid={$appID}&js_code={$code}&grant_type=authorization_code&component_appid={$this->component_appid}&component_access_token={$authorizer_refresh_token}";
+        $result = Tools::httpPost($url, '');
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp Submit Audit Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+        return $result;
+    }
 }
