@@ -403,7 +403,6 @@ class WechatService
         $url = "https://api.weixin.qq.com/sns/userinfo?access_token={$oauthAccessToken}&openid={$openid}&lang=zh_CN";
         return $this->parseJson(Tools::httpGet($url));
     }
-
     /**
      *  第三方平台在代替小程序发布代码之前，需要调用接口为小程序添加第三方自身的域名
      * @param string $params
@@ -436,7 +435,7 @@ class WechatService
     {
         $data = array();
         $data['wechatid'] = $wechatID;
-        $url = 'https://api.weixin.qq.com/wxa/modify_domain?access_token='.$authorizer_refresh_token;
+        $url = 'https://api.weixin.qq.com/wxa/bind_tester?access_token='.$authorizer_refresh_token;
         $result = Tools::httpPost($url, Tools::json_encode($data));
         if (($result = $this->_decode($result)) === false) {
             Tools::log("Miniapp bind tester Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
@@ -478,7 +477,7 @@ class WechatService
         $url = 'https://api.weixin.qq.com/wxa/commit?access_token='.$authorizer_refresh_token;
         $result = Tools::httpPost($url, Tools::json_encode($data));
         if (($result = $this->_decode($result)) === false) {
-            Tools::log("Miniapp unbind tester Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+            Tools::log("Miniapp commit Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
         }
         return $result;
     }
@@ -491,7 +490,7 @@ class WechatService
     public function miniappGetQrcode($authorizer_refresh_token)
     {
         $url = 'https://api.weixin.qq.com/wxa/get_qrcode?access_token='.$authorizer_refresh_token;
-        $result = Tools::httpPost($url, '');
+        $result = Tools::httpGet($url);
 
         return $result;
     }
@@ -555,10 +554,50 @@ class WechatService
      */
     public function miniappLogin($code, $appID, $authorizer_refresh_token)
     {
-        $url = "https://api.weixin.qq.com/sns/component/jscode2session?appid={$appID}&js_code={$code}&grant_type=authorization_code&component_appid={$this->component_appid}&component_access_token={$authorizer_refresh_token}";
-        $result = Tools::httpPost($url, '');
+        $url = "https://api.weixin.qq.com/sns/component/jscode2session?appid={$appID}&js_code={$code}&grant_type=authorization_code&component_appid={$this->component_appid}&component_access_token=".$this->getComponentAccessToken();
+        $result = Tools::httpGet($url);
         if (($result = $this->_decode($result)) === false) {
-            Tools::log("Miniapp Submit Audit Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+            Tools::log("Miniapp Get Sesion_key Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+        return $result;
+    }
+
+    public function miniappOpenCreate($data, $authorizer_refresh_token)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/open/create?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, Tools::json_encode($data));
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp open create Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+        return $result;
+    }
+
+    public function miniappOpenBind($data, $authorizer_refresh_token)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/open/bind?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, Tools::json_encode($data));
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp open bind Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+        return $result;
+    }
+
+    public function miniappOpenUnbind($data, $authorizer_refresh_token)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/open/unbind?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, Tools::json_encode($data));
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp open unbind Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+        return $result;
+    }
+
+    public function miniappOpenGet($data, $authorizer_refresh_token)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/open/get?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, Tools::json_encode($data));
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp open get Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
         }
         return $result;
     }
