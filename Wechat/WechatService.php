@@ -21,8 +21,9 @@ use Wechat\Lib\Tools;
  * 公众号第三方平台SDK
  *
  * @version 1.0
- * @author Anyon <zoujingli@qq.com>
+ * @author Anyon <zoujingli@qq.com> mojianyuan <jianyuan.mo@gmail.com>
  * @date 2016/10/18 00:35:55
+ * @date 2017/11/17 10:35:55
  */
 class WechatService
 {
@@ -409,14 +410,8 @@ class WechatService
      * @param string $authorizer_refresh_token 授权方刷新令牌
      * @return bool
      */
-    public function miniappModifyDomain($params, $authorizer_refresh_token)
+    public function miniappModifyDomain($data, $authorizer_refresh_token)
     {
-        $data = array();
-        $data['action'] = 'add';
-        $data['requestdomain'] = $params['requestdomain'];
-        $data['wsrequestdomain'] = $params['wsrequestdomain'];
-        $data['uploaddomain'] = $params['uploaddomain'];
-        $data['downloaddomain'] = $params['downloaddomain'];
         $url = 'https://api.weixin.qq.com/wxa/modify_domain?access_token='.$authorizer_refresh_token;
         $result = Tools::httpPost($url, Tools::json_encode($data));
         if (($result = $this->_decode($result)) === false) {
@@ -475,7 +470,8 @@ class WechatService
         $data['user_version'] = $params['user_version'];
         $data['user_desc'] = $params['user_desc'];
         $url = 'https://api.weixin.qq.com/wxa/commit?access_token='.$authorizer_refresh_token;
-        $result = Tools::httpPost($url, Tools::json_encode($data));
+        #$result = Tools::httpPost($url, Tools::json_encode($data));
+        $result = Tools::httpPost($url, json_encode($data));
         if (($result = $this->_decode($result)) === false) {
             Tools::log("Miniapp commit Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
         }
@@ -598,6 +594,86 @@ class WechatService
         $result = Tools::httpPost($url, Tools::json_encode($data));
         if (($result = $this->_decode($result)) === false) {
             Tools::log("Miniapp open get Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+        return $result;
+    }
+
+    /**
+     * 获取小程序模板库标题列表
+     * @param array $data offset分页从0开始，count最大为20
+     * @param string $authorizer_refresh_token 授权方刷新令牌
+     * @return mixed 
+     */  
+    public function miniappTemplateLibList($data, $authorizer_refresh_token)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/wxopen/template/library/list?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, Tools::json_encode($data));
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp template list Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+        return $result;
+    }
+
+    /**
+     * 获取模板库某个模板标题下关键词库 
+     * @param array $data {id: }  模板标题id
+     * @param string $authorizer_refresh_token 授权方刷新令牌
+     * @return mixed 
+     */  
+    public function miniappTemplateLibGet($data, $authorizer_refresh_token)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/wxopen/template/library/get?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, Tools::json_encode($data));
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp template get Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+        return $result;
+    }
+ 
+    /**
+     * 组合模板并添加至帐号下的个人模板库 
+     * @param array $data {id: '', "keyword_id_list":[3,4,5] }  
+     * @param string $authorizer_refresh_token 授权方刷新令牌
+     * @return mixed  {template_id: ''}
+     */  
+    public function miniappTemplateAdd($data, $authorizer_refresh_token)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/wxopen/template/add?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, Tools::json_encode($data));
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp template add Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+        return $result;
+    }
+
+    /**
+     * 获取帐号下已存在的模板列表 
+     * @param array $data offset分页从0开始，count最大为20
+     * @param string $authorizer_refresh_token 授权方刷新令牌
+     * @return mixed 
+     */  
+    public function miniappTemplateList($data, $authorizer_refresh_token)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/wxopen/template/list?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, Tools::json_encode($data));
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp template list Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
+        }
+        return $result;
+    }
+
+    /**
+     * 删除帐号下的某个模板 
+     * @param array $data {template_id: ''}  
+     * @param string $authorizer_refresh_token 授权方刷新令牌
+     * @return mixed
+     */  
+    public function miniappTemplateDel($data, $authorizer_refresh_token)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/wxopen/template/del?access_token='.$authorizer_refresh_token;
+        $result = Tools::httpPost($url, Tools::json_encode($data));
+        if (($result = $this->_decode($result)) === false) {
+            Tools::log("Miniapp template add Faild. {$this->errMsg} [$this->errCode]", "ERR - {$this->authorizer_appid}");
         }
         return $result;
     }
